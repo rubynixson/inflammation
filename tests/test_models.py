@@ -1,5 +1,5 @@
 """Tests for statistics functions within the Model layer."""
-
+import pytest
 import numpy as np
 import numpy.testing as npt
 from unittest.mock import patch
@@ -41,4 +41,25 @@ def test_load_csv(mock_get_data_dir):
         assert kwargs['fname'] == '/test.csv'
 
 # TODO(lesson-automatic) Implement tests for the other statistical functions
+@pytest.mark.parametrize("test, expected", [ ([[4, 2, 8],
+                           [3, 4, 9],
+                           [5, 6, 2]], [5, 6, 9]), ([[1,5,8], [4,2,6], [5,9,2]], [5,9,8]),]) 
+def test_daily_max(test, expected):
+    """Test that the max function works with an array of positive integers."""
+    from inflammation.models import daily_max
+    # Need to use Numpy testing functions to compare arrays
+    npt.assert_array_equal(np.array(expected), daily_max(np.array(test)))
+
+
+
+@pytest.mark.parametrize("test, expected", [ ([[-4, 2, 8],
+                           [3, 4, -9],
+                           [5, 6, -2]], [-4, 2, -9]), ([[1,-5,8], [4,2,-6], [-5,9,2]], [-5,-5,-6]),]) 
+def test_daily_min(test, expected):
+    """Test that the min function works with an array of positive and negative integers."""
+    from inflammation.models import daily_min
+    # Need to use Numpy testing functions to compare arrays
+    npt.assert_array_equal(np.array(expected), daily_min(np.array(test)))
+
+
 # TODO(lesson-mocking) Implement a unit test for the load_csv function
